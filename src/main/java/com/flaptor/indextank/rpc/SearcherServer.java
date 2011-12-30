@@ -25,6 +25,7 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TBinaryProtocol.Factory;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
+import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TTransportException;
 
@@ -78,7 +79,7 @@ public class SearcherServer {
                     TServerSocket serverTransport = new TServerSocket(SearcherServer.this.port);
                     Searcher.Processor processor = new Searcher.Processor(new SearcherImpl(SearcherServer.this.searcher));
                     Factory protFactory = new TBinaryProtocol.Factory(true, true);
-                    TServer server = new TThreadPoolServer(processor, serverTransport, protFactory);
+                    TServer server = new TThreadPoolServer(processor, serverTransport,new TFramedTransport.Factory(), protFactory);
                     System.out.println("Starting searcher server on port " + SearcherServer.this.port + " ...");
                     server.serve();
                 } catch( TTransportException tte ){

@@ -23,6 +23,7 @@ import org.apache.thrift.protocol.TBinaryProtocol.Factory;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
+import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TTransportException;
 
 import com.flaptor.indextank.query.ParseException;
@@ -48,7 +49,7 @@ public class SuggestorServer {
                     TServerSocket serverTransport = new TServerSocket(SuggestorServer.this.port);
                     Suggestor.Processor processor = new Suggestor.Processor(new SuggestorImpl(SuggestorServer.this.suggestor));
                     Factory protFactory = new TBinaryProtocol.Factory(true, true);
-                    TServer server = new TThreadPoolServer(processor, serverTransport, protFactory);
+                    TServer server = new TThreadPoolServer(processor, serverTransport, new TFramedTransport.Factory(), protFactory);
                     System.out.println("Starting suggestor server on port " + SuggestorServer.this.port + " ...");
                     server.serve();
                 } catch( TTransportException tte ){

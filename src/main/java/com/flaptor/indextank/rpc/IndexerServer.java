@@ -25,6 +25,7 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TBinaryProtocol.Factory;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TThreadPoolServer;
+import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TTransportException;
 
@@ -52,7 +53,7 @@ public class IndexerServer {
                     TServerSocket serverTransport = new TServerSocket(IndexerServer.this.port);
                     Indexer.Processor processor = new Indexer.Processor(new IndexerImpl(ie, IndexerServer.this.indexer));
                     Factory protFactory = new TBinaryProtocol.Factory(true, true);
-                    TServer server = new TThreadPoolServer(processor, serverTransport, protFactory);
+                    TServer server = new TThreadPoolServer(processor, serverTransport,new TFramedTransport.Factory(), protFactory);
                     System.out.println("Starting indexer server on port " +  IndexerServer.this.port + " ...");
                     server.serve();
                 } catch( TTransportException tte ){
