@@ -1,0 +1,7 @@
+target
+.idea
+*.iml
+thrift/
+thrift/project
+thrift/target
+index
